@@ -1,0 +1,17 @@
+GetAntipodeIntent antipode for {Location}
+GetAntipodeIntent the antipode of {Location}
+GetAntipodeIntent the antipode for {Location}
+GetAntipodeIntent antipode of {Location}
+GetAntipodeIntent what is under {Location}
+GetAntipodeIntent what is the antipode of {Location}
+GetAntipodeIntent antipode of {Location}
+GetAntipodeIntent get antipode {Location}
+GetAntipodeIntent get antipode of {Location}
+GetAntipodeIntent on the other side of the earth from {Location}
+GetAntipodeIntent what is {Location} antipode
+GetAntipodeIntent what is beneath {Location}
+GetAntipodeIntent what is underneath {Location}
+GetAntipodeIntent where will I dig a hole to from {Location}
+GetAntipodeIntent if I dig a hole from {Location} where will it lead
+GetAntipodeIntent if I dig a hole through the earth from {Location} where will it lead
+GetAntipodeIntent if I dig downwards from {Location} where will I land 

@@ -1,0 +1,22 @@
+{
+  "intents": [
+    {
+      "intent": "GetAntipodeIntent",
+      "slots": [
+        {
+          "name": "Location",
+          "type": "AMAZON.AdministrativeArea"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    }
+  ]
+ }
