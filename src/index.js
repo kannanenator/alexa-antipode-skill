@@ -4,16 +4,20 @@ var https = require('https');
 
 
 //OPTIONAL: replace with "amzn1.echo-sdk-ams.app.[your-unique-value-here]";
-var APP_ID =  "replace me"; 
+var APP_ID =  "Replace Me"; 
 var SKILL_NAME = 'Antipode';
-var GEO_API_KEY = 'replace me';
+var GEO_API_KEY = 'Replace Me';
 var URL_PREFIX = 'https://maps.googleapis.com/maps/api/geocode/json?'
 
 var alexa;
 
 var handlers = {
     'LaunchRequest': function (response) {
-        this.emit(':tell', "Ask me for the antipode of anywhere on earth!");
+        var reprompt = 'Ask me for the antipode of anywhere on earth!';
+        this.emit(':ask', 'I am Antipode Finder...Ask me for the antipode of anywhere on earth!', reprompt);
+    },
+    'SessionEndedRequest': function (response){
+        console.log("exiting");
     },
     'GetAntipodeIntent': function (response) {
         this.emit('GetAntipode', this.event.request.intent.slots.Location.value, response);
@@ -23,13 +27,29 @@ var handlers = {
 	    var url = URL_PREFIX + "address=" +location + "&key=" + GEO_API_KEY;
 	    console.log(url);
         var that = this;
+        var finalloc;
         var speechOutput;
-        getJsonLatLong(location, url, function(speechOutput){
-        	that.emit(':tellWithCard',speechOutput, SKILL_NAME, location);
+        getJsonLatLong(location, url, function(finalloc){
+            if (finalloc == "none")
+            {
+                speechOutput = "The Antipode for " + location + " is not on any known land mass. Keep swimming, and please try another location!";
+                that.emit(':tellWithCard',speechOutput, SKILL_NAME, speechOutput);
+            }
+            else if (finalloc == "noloc")
+            {
+                speechOutput = "Sorry, I wasn't able to find " + location + " on the map. Please try another location!";
+                that.emit(':tellWithCard',speechOutput, SKILL_NAME, speechOutput);
+            }
+            else
+            {
+                speechOutput = "The Antipode for " + location + " is: somewhere near " + finalloc;
+                that.emit(':tellWithCard',speechOutput, SKILL_NAME, speechOutput)
+            }
+        	
         });
     },
     'AMAZON.HelpIntent': function () {
-        var speechOutput = "You can ask me what is underneath a particular location, or, you can say exit... What can I help you with?";
+        var speechOutput = "You can ask me what is the antipode for a particular location, or, you can say exit... What can I help you with?";
         var reprompt = "What can I help you with?";
         this.emit(':ask', speechOutput, reprompt);
     },
@@ -67,7 +87,7 @@ function getJsonLatLong(location, url, callback){
 	    		    long_old = parsed.results[0].geometry.location.lng;
 	    		}
 	    		else{
-	    		    callback("I'm sorry but I can't seem to find " + location );
+	    		    callback("noloc");
 	    		}
 	    		
 	    		if (long_old > 0)
@@ -97,17 +117,17 @@ function getJsonLatLong(location, url, callback){
         	    			finalLoc = antipode + " in " + antipode_country;
 	        	    		speechOutput = "The Antipode for " + location + " is: somewhere near " + finalLoc;
 	        	    		console.log('final location is', finalLoc);
-	        	    		callback(speechOutput);
+	        	    		callback(finalLoc);
         	    		}
         	    		if (parsed.results.length == 1){
         	    		    antipode = parsed.results[parsed.results.length-1].address_components[0].long_name;
         	    			finalLoc = antipode;
 	        	    		speechOutput = "The Antipode for " + location + " is: somewhere near " + finalLoc;
 	        	    		console.log('final location is', finalLoc);
-	        	    		callback(speechOutput);
+	        	    		callback(finalLoc);
         	    		}
         	    		else{
-        	    			callback("The Antipode for " + location + " is not available and probably in the middle of the ocean")
+        	    			callback("none");
         	    		}
         	    		
         	    	});
